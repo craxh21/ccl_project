@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import boto3
-from ccl_project.utils import calculate_md5
+from utils import calculate_md5
 
 load_dotenv()
 
