@@ -36,9 +36,9 @@ def upload_file():
     if existing:
         db.files.update_one(
             {"_id": existing["_id"]},
-            {"$set": {"last_uploaded": datetime.datetime.now()}}
+            {"$set": {"last_uploaded": datetime.datetime.utcnow()}}
         )
-        return jsonify({"status": "duplicate", "message": "File already exists"})
+        return render_template("result.html", message="File already exists", checksum=checksum)
 
     # Upload to S3
     s3.upload_fileobj(request.files['file'], os.getenv("S3_BUCKET_NAME"), file.filename)
@@ -48,10 +48,10 @@ def upload_file():
         "checksum": checksum,
         "size": len(file_data),
         "extension": file.filename.split('.')[-1],
-        "timestamp": datetime.datetime.now()
+        "timestamp": datetime.datetime.utcnow()
     })
 
-    return jsonify({"status": "success", "message": "File uploaded"})
+    return render_template("result.html", message="File uploaded successfully!", checksum=checksum)
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
