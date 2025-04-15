@@ -1,5 +1,5 @@
 import os, datetime
-from flask import Flask, request, jsonify
+from flask import Flask, render_template, request, jsonify
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import boto3
@@ -21,6 +21,10 @@ s3 = boto3.client(
 @app.route('/')
 def home():
     return "Flask app is running!"
+
+@app.route("/upload-form")
+def upload_form():
+    return render_template("index.html")
 
 @app.route("/upload", methods=["POST"])
 def upload_file():
