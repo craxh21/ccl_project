@@ -18,6 +18,10 @@ s3 = boto3.client(
     region_name=os.getenv("AWS_REGION")
 )
 
+@app.route('/')
+def home():
+    return "Flask app is running!"
+
 @app.route("/upload", methods=["POST"])
 def upload_file():
     file = request.files['file']
