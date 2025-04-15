@@ -9,7 +9,7 @@ load_dotenv()
 
 app = Flask(__name__)
 
-client = MongoClient(os.getenv("MONGO_URI"))
+client = MongoClient("MONGO_URI=mongodb+srv://craxh21:craxhMDB21#@cluster0.mongodb.net/ccl_proj?retryWrites=true&w=majority")
 db = client.file_uploads
 s3 = boto3.client(
     's3',
