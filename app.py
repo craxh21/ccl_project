@@ -18,11 +18,11 @@ s3 = boto3.client(
     region_name=os.getenv("AWS_REGION")
 )
 
-@app.route('/')
-def home():
-    return "Flask app is running!"
+# @app.route('/')
+# def home():
+#     return "Flask app is running!"
 
-@app.route("/upload-form")
+@app.route("/")
 def upload_form():
     return render_template("index.html")
 

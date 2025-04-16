@@ -1,14 +1,199 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>File Upload</title>
+    <meta charset="UTF-8">
+    <title>Cloud Based Improved File Handling and Duplication Removal Using MD5</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .file-upload-container {
+            transition: all 0.3s ease;
+        }
+        .file-upload-container:hover {
+            border-color: #7dd3fc;
+            box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.3);
+        }
+        .file-upload-container.drag-over {
+            border-color: #0ea5e9;
+            background-color: #f0f9ff;
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.3);
+        }
+        .title-gradient {
+            background: linear-gradient(90deg, #0ea5e9 0%, #0369a1 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+    </style>
 </head>
-<body>
-    <h2>Upload a File</h2>
-    <form action="/upload" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" required />
-        <br><br>
-        <input type="submit" value="Upload" />
-    </form>
+<body class="bg-gradient-to-br from-primary-50 to-primary-100 min-h-screen flex items-center justify-center px-4 py-12">
+
+    <div class="max-w-3xl w-full space-y-8">
+        <div class="text-center">
+            <h1 class="title-gradient text-3xl md:text-4xl font-bold mb-4">Cloud Based Improved File Handling and Duplication Removal Using MD5</h1>
+            <p class="text-gray-600 max-w-2xl mx-auto">Securely upload and manage your files with automatic duplicate detection using MD5 hashing</p>
+        </div>
+
+        <div class="bg-white p-8 rounded-2xl shadow-lg">
+            <div class="text-center mb-8">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                </svg>
+                <h2 class="text-2xl font-bold text-gray-800 mt-4">Upload Your Files</h2>
+                <p class="text-gray-500 mt-2">Our system automatically checks for duplicates using MD5 hashing</p>
+            </div>
+            
+            <form action="/upload" method="post" enctype="multipart/form-data" class="space-y-6">
+                <div 
+                    id="dropzone"
+                    class="file-upload-container border-2 border-dashed border-gray-300 rounded-xl p-6 text-center cursor-pointer"
+                >
+                    <input 
+                        type="file" 
+                        name="file" 
+                        id="fileInput"
+                        required 
+                        class="hidden"
+                    />
+                    <div class="flex flex-col items-center justify-center space-y-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                        </svg>
+                        <p class="text-sm text-gray-500">
+                            <span class="font-medium text-primary-600">Click to upload</span> or drag and drop
+                        </p>
+                        <p class="text-xs text-gray-400">PDF, DOCX, JPG, PNG up to 10MB</p>
+                    </div>
+                    <div id="fileName" class="mt-3 text-sm font-medium text-primary-700 hidden"></div>
+                </div>
+
+                <div class="flex flex-col space-y-4">
+                    <button type="submit" 
+                        id="submitBtn"
+                        class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-6 rounded-lg shadow-md transition duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                        Upload File
+                    </button>
+                    
+                    <div class="text-center">
+                        <p class="text-xs text-gray-400">By uploading, you agree to our <a href="#" class="text-primary-600 hover:underline">Terms of Service</a></p>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl shadow-lg mt-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">How MD5 Deduplication Works</h3>
+            <ul class="space-y-2 text-gray-600 text-sm">
+                <li class="flex items-start">
+                    <svg class="h-4 w-4 text-primary-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Each file is processed using MD5 hashing algorithm</span>
+                </li>
+                <li class="flex items-start">
+                    <svg class="h-4 w-4 text-primary-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>System compares the hash with existing files</span>
+                </li>
+                <li class="flex items-start">
+                    <svg class="h-4 w-4 text-primary-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Duplicate files are automatically detected and handled</span>
+                </li>
+                <li class="flex items-start">
+                    <svg class="h-4 w-4 text-primary-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Saves storage space and improves organization</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const dropzone = document.getElementById('dropzone');
+        const fileInput = document.getElementById('fileInput');
+        const fileName = document.getElementById('fileName');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // Handle click on dropzone
+        dropzone.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Handle file selection
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                fileName.textContent = e.target.files[0].name;
+                fileName.classList.remove('hidden');
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Handle drag over
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropzone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropzone.classList.add('drag-over');
+            });
+        });
+
+        // Handle drag leave
+        ['dragleave', 'dragend'].forEach(eventName => {
+            dropzone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropzone.classList.remove('drag-over');
+            });
+        });
+
+        // Handle drop
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzone.classList.remove('drag-over');
+            
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                fileName.textContent = e.dataTransfer.files[0].name;
+                fileName.classList.remove('hidden');
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Disable submit button initially
+        submitBtn.disabled = true;
+    </script>
 </body>
 </html>
